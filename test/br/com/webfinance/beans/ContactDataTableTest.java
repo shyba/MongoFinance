@@ -1,0 +1,28 @@
+package br.com.webfinance.beans;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import br.com.webfinance.config.DevMongoDBFactoryConfig;
+import br.com.webfinance.config.MongoDbConfig;
+import br.com.webfinance.repo.ContactRepository;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { DevMongoDBFactoryConfig.class,MongoDbConfig.class })
+@ActiveProfiles("dev")
+public class ContactDataTableTest {
+
+	
+	@Autowired
+	ContactRepository contactRepo;
+	
+	@Test
+	public void test() {
+		new ContactDataTable().getContacts();
+	}
+
+}
