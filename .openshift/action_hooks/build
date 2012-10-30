@@ -3,3 +3,14 @@
 # available.  Otherwise it will execute while your application is stopped
 # before the deploy step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
+
+if [ -e ${OPENSHIFT_REPO_DIR}/active-webapp/pom.xml ]
+then
+    cd ${OPENSHIFT_REPO_DIR}/active-webapp
+    mvn clean package -Popenshift -DskipTests -DskipITs
+else
+    echo no webapp in ${OPENSHIFT_REPO_DIR}/active-webapp
+    exit 1
+fi
+
+
