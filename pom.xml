@@ -4,7 +4,7 @@
 	<groupId>com.shyba.apps</groupId>
 	<artifactId>MongoFinance</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>war</packaging>
 	<name>WebFinance</name>
 
 	<build>
@@ -25,7 +25,14 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
+				<configuration>
+				<classesDirectory>WebContent/WEB-INF/classes</classesDirectory>
+				<webAppSourceDirectory>WebContent</webAppSourceDirectory>
+				<webXml>WebContent/WEB-INF/web.xml</webXml>
+
+				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 	<dependencies>

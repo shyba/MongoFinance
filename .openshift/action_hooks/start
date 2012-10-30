@@ -5,7 +5,7 @@
 if [ -e ${OPENSHIFT_REPO_DIR}/pom.xml ]
 then
     cd ${OPENSHIFT_REPO_DIR}/
-    nohup mvn --quiet -Djetty.host=$OPENSHIFT_INTERNAL_IP -Djetty.port=$OPENSHIFT_INTERNAL_PORT org.mortbay.jetty:jetty-maven-plugin:start >${OPENSHIFT_LOG_DIR}/jetty.log 2>&1 &
+    nohup mvn --quiet -Djetty.host=$OPENSHIFT_INTERNAL_IP -Djetty.port=$OPENSHIFT_INTERNAL_PORT jetty:run >${OPENSHIFT_LOG_DIR}/jetty.log 2>&1 &
 else
     echo no webapp in ${OPENSHIFT_REPO_DIR}/active-webapp
     exit 1
