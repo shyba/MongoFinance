@@ -7,7 +7,7 @@
 if [ -e ${OPENSHIFT_REPO_DIR}/pom.xml ]
 then
     cd ${OPENSHIFT_REPO_DIR}/
-    mvn clean package -Popenshift -DskipTests -DskipITs
+    mvn clean compile
 else
     echo no webapp in ${OPENSHIFT_REPO_DIR}/active-webapp
     exit 1

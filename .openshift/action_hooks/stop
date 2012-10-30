@@ -5,8 +5,9 @@
 if [ -e ${OPENSHIFT_REPO_DIR}/pom.xml ]
 then
     cd ${OPENSHIFT_REPO_DIR}/
-    mvn --quiet org.mortbay.jetty:jetty-maven-plugin:stop
+    mvn --quiet jetty:stop
 else
     echo no webapp in ${OPENSHIFT_REPO_DIR}/active-webapp
     exit 1
-fi
+fils
+
