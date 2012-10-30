@@ -3,16 +3,3 @@
 # available.  Otherwise it will execute while your application is stopped
 # before the build step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
-
-# find and link to the active webapp, if not explicitly specified
-if [ ! -d ${OPENSHIFT_REPO_DIR}/]
-then
-    POM=$(ls ${OPENSHIFT_REPO_DIR}/pom.xml | head -1)
-    if [ -n "$POM" ]
-    then
-        ln -s ${POM%%/pom.xml} ${OPENSHIFT_REPO_DIR/}/
-    else
-        echo unable to locate webapp
-        exit 1
-    fi
-fi
