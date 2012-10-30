@@ -3,7 +3,7 @@ package br.com.webfinance.model;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Reference;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -13,7 +13,7 @@ public class FinancialEntry {
 	private int entryId;
 	private String name;
 	private String description;
-	@DBRef
+	@Reference
 	private Category category;
 	private int maturityMonth;
 	private int maturityYear;
@@ -22,7 +22,7 @@ public class FinancialEntry {
 	private double value;
 	private double totalValue;
 	
-	@DBRef
+	@Reference
 	private EntryType entryType;
 	private boolean closed;
 	

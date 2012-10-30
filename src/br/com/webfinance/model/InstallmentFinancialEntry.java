@@ -2,6 +2,7 @@ package br.com.webfinance.model;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Reference;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -13,6 +14,7 @@ public class InstallmentFinancialEntry extends FinancialEntry{
 	private int finalDay;
 	private int finalMonth;
 	private int finalYear;
+
 	
 	
 	
@@ -68,6 +70,7 @@ public class InstallmentFinancialEntry extends FinancialEntry{
 	public void setInitialYear(int initialYear) {
 		this.initialYear = initialYear;
 	}
+
 
 
 

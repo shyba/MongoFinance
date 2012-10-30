@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.RowEditEvent;
@@ -17,7 +18,7 @@ import br.com.webfinance.model.Category;
 import br.com.webfinance.repo.CategoryRepository;
 
 @Controller
-@Scope("session")
+@ViewScoped
 public class CategoryBean implements Serializable {
 
 	/**
@@ -56,7 +57,7 @@ public class CategoryBean implements Serializable {
 			category.setSuperCategory(null);
 		categoryRepository.save(category);
 		sendMessage("Categoria salva!");
-		System.out.println("Saved! Count:" + categoryRepository.count());
+		reloadCategories();
 		return "categories";
 	}
 
@@ -78,12 +79,19 @@ public class CategoryBean implements Serializable {
 	}
 
 	public List<Category> getCategories() {
+		if (categories == null || categories.size() == 0) {
+			reloadCategories();
+		}
+		return categories;
+	}
+	
+	public void reloadCategories(){
 		categories = new ArrayList<Category>();
 		for (Category superCat : getSuperCategories()) {
 			categories.add(superCat);
-			categories.addAll(categoryRepository.findBySuperCategory(superCat));
+			categories.addAll(categoryRepository
+					.findBySuperCategory(superCat));
 		}
-		return categories;
 	}
 
 	public void setItemSuperCategory(String itemSuperCategory) {
@@ -99,11 +107,14 @@ public class CategoryBean implements Serializable {
 
 	public void onEdit(RowEditEvent event) {
 		Category edited = (Category) event.getObject();
-		Category original = categoryRepository.findByName(edited.getName()).get(0);
-		
-		Category superCat=null;
-		if(edited.getSuperCategory().getName().length()>0)
-			superCat = categoryRepository.findByName(edited.getSuperCategory().getName()).get(0);
+		Category original = categoryRepository.findByName(edited.getName())
+				.get(0);
+
+		Category superCat = null;
+		if (edited.getSuperCategory() != null
+				&& edited.getSuperCategory().getName().length() > 0)
+			superCat = categoryRepository.findByName(
+					edited.getSuperCategory().getName()).get(0);
 		original.setName(edited.getName());
 		original.setSuperCategory(superCat);
 		categoryRepository.save(original);
@@ -111,6 +122,7 @@ public class CategoryBean implements Serializable {
 				original.getName());
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+
 	}
 
 	public void onCancel(RowEditEvent event) {
@@ -118,6 +130,14 @@ public class CategoryBean implements Serializable {
 				((Category) event.getObject()).getName());
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public CategoryRepository getCategoryRepository() {
+		return categoryRepository;
+	}
+
+	public void setCategoryRepository(CategoryRepository categoryRepository) {
+		this.categoryRepository = categoryRepository;
 	}
 
 }
