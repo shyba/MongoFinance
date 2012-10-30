@@ -1,6 +1,12 @@
 #!/bin/bash
-# The logic to stop your application should be put in this script.
- 
-curl --silent -L https://raw.github.com/marekjelen/openshift-jetty/master/stop.sh | bash
-kill `ps -ef | grep testrubyserver.rb | grep -v grep | awk '{ print $2 }'` > /dev/null 2>&1
-exit 0
+# The logic to start up your application should be put in this
+# script. The application will work only if it binds to
+# $OPENSHIFT_INTERNAL_IP:8080
+if [ -e ${OPENSHIFT_REPO_DIR}/pom.xml ]
+then
+    cd ${OPENSHIFT_REPO_DIR}/
+    mvn --quiet org.mortbay.jetty:jetty-maven-plugin:stop
+else
+    echo no webapp in ${OPENSHIFT_REPO_DIR}/active-webapp
+    exit 1
+fi
