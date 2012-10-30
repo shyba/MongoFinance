@@ -1,6 +1,3 @@
 #!/bin/bash
-# The logic to stop your application should be put in this script.
- 
+
 curl --silent -L https://raw.github.com/marekjelen/openshift-jetty/master/stop.sh | bash
-kill `ps -ef | grep testrubyserver.rb | grep -v grep | awk '{ print $2 }'` > /dev/null 2>&1
-exit 0
