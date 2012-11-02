@@ -20,7 +20,7 @@ public class MongoDbConfig {
  
  @Bean
   public MongoDbFactory mongoDbFactory() throws Exception {
-      Mongo mongo = new Mongo("127.0.0.1", 27017);
+      Mongo mongo = new Mongo("127.8.18.1", 27017);
      String databaseName = "finance";
         MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo,
                 databaseName);
