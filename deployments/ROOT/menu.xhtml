@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:form>
+    <p:menubar>  
+        <p:submenu label="Lançamentos" icon="ui-icon-person">  
+            <p:menuitem value="Simples" url="entries.xhtml" />  
+            <p:menuitem value="Parcelado" url="#" />
+            <p:menuitem value="Recorrente" url="#" />  
+        </p:submenu>  
+  
+  		<p:menuitem value="Orçamentos" icon="ui-icon-document">    
+        </p:menuitem>
+  
+        <p:menuitem value="Contatos" icon="ui-icon-contact" url="contacts.xhtml">    
+        </p:menuitem>
+        
+        <p:menuitem value="Categorias" icon="ui-icon-folder-open" url="categories.xhtml">    
+        </p:menuitem>    
+  
+        <p:submenu label="Conta" icon="ui-icon-power">  
+            <p:menuitem value="Informações" url="#" />  
+            <p:submenu label="Preferências" icon="ui-icon-wrench">  
+               <p:menuitem value="Envio de alertas" url="#" />  
+                <p:menuitem value="Dados pessoais" url="#" />  
+            </p:submenu>
+            <p:menuitem value="Sair" url="http://www.primefaces.org" icon="ui-icon-close" />  
+        </p:submenu>  
+
+  
+          
+    </p:menubar>  
+  
+
+    </h:form>
+    </html>
