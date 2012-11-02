@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+<h:body>
+
+	<ui:composition template="mainLayout.xhtml">
+		<ui:define name="content">
+			<h:form id="form">
+
+				<p:growl id="messages" showDetail="true" />
+
+				<p:dataTable var="contact" value="#{contactDataTable.contacts}" id="contactList"
+					editable="true">
+
+					<f:facet name="header">  
+            Contatos
+        </f:facet>
+
+					<!-- <p:ajax event="rowEdit" listener="#{contactDataTable.onEdit}"
+						update=":form:messages" />
+					<p:ajax event="rowEditCancel" listener="#{contactDataTable.onCancel}"
+						update=":form:messages" /> -->
+
+					<p:column headerText="Nome" style="width:125px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contact.name}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Email" style="width:125px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.mail}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contact.mail}" style="width:100%" label="Email" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Celular" style="width:125px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.mobileNumber}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contact.mobileNumber}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Fixo" style="width:125px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contact.homeNumber}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contact.homeNumber}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Options" style="width:50px">
+						<p:rowEditor />
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+		</ui:define>
+		
+		
+		
+		
+		
+		<ui:define name="footer">
+		<br/><br/>
+		<h:form >
+<p:fieldset legend="Adicionar Contato" widgetVar="regWidget" style="width: 600px;">
+   <h:panelGrid columns="3" width="550" border="0">
+    <h:outputLabel value="Nome" />
+    <p:inputText value="#{contactBean.contact.name}" 
+       id="Name"
+        required="true" 
+        requiredMessage="Nome do contato é obrigatório!"
+        validatorMessage="Nome do contato deve ter entre 3 e 120 catacteres!"
+        >
+     <f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
+    </p:inputText>
+    <p:message for="Name"/>
+    
+    <h:outputLabel value="Email" />
+    <p:inputText value="#{contactBean.contact.mail}" 
+       id="Email"
+        required="true" 
+        requiredMessage="Email do contato é obrigatório!"
+        validatorMessage="Email do contato deve ter entre 3 e 120 catacteres!"
+        >
+     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
+    </p:inputText>
+    <p:message for="Email"/>
+    
+    <p:commandButton value="Adicionar" action="#{contactBean.register}" ajax="false" ></p:commandButton>
+    </h:panelGrid>
+    </p:fieldset>
+
+
+</h:form> 
+		</ui:define>
+		
+	</ui:composition>
+
+</h:body>
+
+</html>
