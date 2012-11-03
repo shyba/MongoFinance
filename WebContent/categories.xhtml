@@ -13,15 +13,15 @@
 
 
 
-
+			<f:view>
 			<h:form id="form">
 
 				<p:growl id="messages" showDetail="true" />
 
-				<p:dataTable var="category" value="#{categoryBean.categories}"
-					id="categoryList" editable="true">
-					<p:ajax event="rowEdit" listener="#{categoryBean.onEdit}"
-						update="@this :form:messages" />
+				<p:dataTable var="category" value="#{categoryBean.categories}" 
+					id="categoryList" editable="true" >
+					<p:ajax  event="rowEdit" listener="#{categoryBean.onEdit}"
+						update=":form:categoryList :form:messages" />
 
 					<f:facet name="header">  
             Categorias
@@ -32,7 +32,7 @@
 
 					<p:column headerText="Nome" style="width:125px">
 						<p:cellEditor>
-							<f:facet name="output">
+							<f:facet  name="output" >
 								<h:outputText value="#{category.name}" />
 							</f:facet>
 							<f:facet name="input">
@@ -66,7 +66,7 @@
 
 
 					<p:column headerText="Options" style="width:50px">
-						<p:rowEditor />
+						<p:rowEditor  />
 
 
 
@@ -112,6 +112,7 @@
 
 
 			</h:form>
+			</f:view>
 		</ui:define>
 
 	</ui:composition>

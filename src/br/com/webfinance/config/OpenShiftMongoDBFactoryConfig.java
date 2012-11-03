@@ -5,10 +5,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.stereotype.Component;
 
 import com.mongodb.Mongo;
 
-@Configuration
+@Component(value="mongoDbFactoryConfig")
 @Profile("openshift")
 public class OpenShiftMongoDBFactoryConfig implements MongoDbFactoryConfig {
  
@@ -20,7 +21,7 @@ public class OpenShiftMongoDBFactoryConfig implements MongoDbFactoryConfig {
       String password = System.getenv("OPENSHIFT_NOSQL_DB_PASSWORD");
       Mongo mongo = new Mongo(openshiftMongoDbHost, openshiftMongoDbPort);
        UserCredentials userCredentials = new UserCredentials(username,password);
-      String databaseName = "notebook";
+      String databaseName = "MongoFinanceTC";
         MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo, databaseName, userCredentials);
         return mongoDbFactory;
  }

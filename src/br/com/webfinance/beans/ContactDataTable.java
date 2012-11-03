@@ -1,16 +1,21 @@
 package br.com.webfinance.beans;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import br.com.webfinance.model.Category;
 import br.com.webfinance.model.Contact;
 import br.com.webfinance.repo.ContactRepository;
 
@@ -18,44 +23,72 @@ import br.com.webfinance.repo.ContactRepository;
 @Controller
 @Scope("session")
 public class ContactDataTable { 
-
+			
 
 	  
 	    private List<Contact> contacts;  
+	    private Contact contact;
+	    Logger logger = Logger.getLogger(getClass());
 	    
-	    @Autowired
 		ContactRepository contactRepository;
 	  	  
-
-	    public ContactDataTable() {  
+	    @Autowired
+	    public ContactDataTable(ContactRepository contactRepository) {  
+	    	this.contactRepository=contactRepository;
+	    	reload();
 //		    contacts = new ArrayList<Contact>();  
 		
 //		    contacts.addAll(contactRepository.findAll());
 		}
 
 
-
+	    private void reload(){
+	    	contacts=contactRepository.findAll();
+	    }
+	    
 		public List<Contact> getContacts() {
-			contacts=contactRepository.findAll();
 			return contacts;
 		}
-
 
 		public void setContacts(List<Contact> contacts) {
 			this.contacts = contacts;
 		}
 
+		public void onEdit(RowEditEvent event) {
+			Contact edited = (Contact) event.getObject();
+			logger.debug(edited.getMobileNumber());
+			logger.debug(edited.getHomeNumber());
+			
+			contactRepository.save(edited);
+			reload();
+			FacesMessage msg = new FacesMessage("Contato Editado!",
+					edited.getName());
 
-		public void onEdit(RowEditEvent event) {  
-//	        FacesMessage msg = new FacesMessage("Car Edited", ((Car) event.getObject()).getModel());  
-	  
-//	        FacesContext.getCurrentInstance().addMessage(null, msg);  
-	    }  
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+
+		}
 	      
-	    public void onCancel(RowEditEvent event) {  
-//	        FacesMessage msg = new FacesMessage("Car Cancelled", ((Car) event.getObject()).getModel());  
-	  
-//	        FacesContext.getCurrentInstance().addMessage(null, msg);  
-	    }  
+		
+		public Contact getContact() {
+			if(contact==null)this.contact=new Contact("Nome do contato", "email@exemplo.com");
+			return contact;
+		}
+		
+		 public String register()
+		  {
+			 System.out.println("Saving... Count:"+contactRepository.count());
+		   //store data in DB
+		   System.out.println(this.contact);
+		   contactRepository.save(contact);
+		   System.out.println("Saved! Count:"+contactRepository.count());
+		   this.contact=new Contact("Nome do contato", "email@exemplo.com");
+		   reload();
+		   return "contacts";//go to welcome.xhtml
+		  }
+
+
+		public void setContact(Contact contact) {
+			this.contact = contact;
+		}
 	
 }

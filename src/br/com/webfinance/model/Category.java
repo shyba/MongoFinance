@@ -1,15 +1,19 @@
 package br.com.webfinance.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Category {
+
 	@Id
+	private ObjectId _id;
 	private String name;
 	private Category superCategory;
+
 	public Category() {
-	
+
 	}
 
 	public Category(String name, Category superCategory) {
@@ -17,11 +21,12 @@ public class Category {
 		this.name = name;
 		this.superCategory = superCategory;
 	}
+
 	public Category(String name) {
 		super();
 		this.name = name;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
@@ -30,15 +35,19 @@ public class Category {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public Category getSuperCategory() {
 		return superCategory;
 	}
+
 	public void setSuperCategory(Category superCategory) {
 		this.superCategory = superCategory;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -48,6 +57,7 @@ public class Category {
 				+ ((superCategory == null) ? 0 : superCategory.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -69,7 +79,13 @@ public class Category {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+	public ObjectId get_id() {
+		return _id;
+	}
+
+	public void set_id(ObjectId _id) {
+		this._id = _id;
+	}
+
 }

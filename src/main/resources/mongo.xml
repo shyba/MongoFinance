@@ -11,12 +11,6 @@
   
 
   <mongo:repositories base-package="br.com.webfinance.repo" />
-  <mongo:mongo host="127.8.18.1" port="27017" />
-	<mongo:db-factory dbname="local" />
-  <bean id="mongoTemplate" 
-                class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
-		</bean>
 
 
 </beans>

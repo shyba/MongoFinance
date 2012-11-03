@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -18,7 +20,7 @@ import br.com.webfinance.model.Category;
 import br.com.webfinance.repo.CategoryRepository;
 
 @Controller
-@ViewScoped
+@Scope("session")
 public class CategoryBean implements Serializable {
 
 	/**
@@ -31,8 +33,13 @@ public class CategoryBean implements Serializable {
 	private List<String> superCategoriesNames;
 	private String itemSuperCategory;
 
-	@Autowired
 	CategoryRepository categoryRepository;
+
+	@Autowired
+	public CategoryBean(CategoryRepository categoryRepository) {
+		this.categoryRepository = categoryRepository;
+		reloadCategories();
+	}
 
 	public Category getCategory() {
 		if (category == null)
@@ -42,13 +49,10 @@ public class CategoryBean implements Serializable {
 	}
 
 	public String register() {
-		System.out.println("Saving... Count:" + categoryRepository.count());
-		// store data in DB
 		if (categoryRepository.findByName(category.getName()).size() > 0) {
 			sendMessage("Este nome já existe!");
 			return "categories";
 		}
-		System.out.println(this.category);
 		if (getItemSuperCategory() != null
 				&& getItemSuperCategory().length() > 0)
 			category.setSuperCategory(categoryRepository.findByName(
@@ -57,6 +61,9 @@ public class CategoryBean implements Serializable {
 			category.setSuperCategory(null);
 		categoryRepository.save(category);
 		sendMessage("Categoria salva!");
+
+		this.category = new Category("Nome da Categoria");
+		itemSuperCategory = null;
 		reloadCategories();
 		return "categories";
 	}
@@ -79,18 +86,14 @@ public class CategoryBean implements Serializable {
 	}
 
 	public List<Category> getCategories() {
-		if (categories == null || categories.size() == 0) {
-			reloadCategories();
-		}
 		return categories;
 	}
-	
-	public void reloadCategories(){
+
+	public void reloadCategories() {
 		categories = new ArrayList<Category>();
 		for (Category superCat : getSuperCategories()) {
 			categories.add(superCat);
-			categories.addAll(categoryRepository
-					.findBySuperCategory(superCat));
+			categories.addAll(categoryRepository.findBySuperCategory(superCat));
 		}
 	}
 
@@ -107,21 +110,21 @@ public class CategoryBean implements Serializable {
 
 	public void onEdit(RowEditEvent event) {
 		Category edited = (Category) event.getObject();
-		Category original = categoryRepository.findByName(edited.getName())
-				.get(0);
-
-		Category superCat = null;
 		if (edited.getSuperCategory() != null
-				&& edited.getSuperCategory().getName().length() > 0)
-			superCat = categoryRepository.findByName(
-					edited.getSuperCategory().getName()).get(0);
-		original.setName(edited.getName());
-		original.setSuperCategory(superCat);
-		categoryRepository.save(original);
+				&& edited.getName().equals(edited.getSuperCategory().getName())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Super categoria não pode ser a mesma!", edited.getName());
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			edited.setSuperCategory(null);
+			return;
+		}
+		categoryRepository.save(edited);
+		reloadCategories();
 		FacesMessage msg = new FacesMessage("Categoria Editada",
-				original.getName());
+				edited.getName());
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+		reloadCategories();
 
 	}
 
