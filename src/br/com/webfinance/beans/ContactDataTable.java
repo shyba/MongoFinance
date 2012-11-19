@@ -1,4 +1,5 @@
 package br.com.webfinance.beans;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -26,7 +27,7 @@ public class ContactDataTable {
 			
 
 	  
-	    private List<Contact> contacts;  
+	    private List<Contact> contacts = new ArrayList<Contact>();  
 	    private Contact contact;
 	    Logger logger = Logger.getLogger(getClass());
 	    
@@ -43,7 +44,8 @@ public class ContactDataTable {
 
 
 	    private void reload(){
-	    	contacts=contactRepository.findAll();
+	    	contacts.clear();
+	    	contacts.addAll(contactRepository.findAll());
 	    }
 	    
 		public List<Contact> getContacts() {

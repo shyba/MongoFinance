@@ -14,12 +14,12 @@
 			<h:form id="form">
 
 				<p:growl id="messages" showDetail="true" />
-
-				<p:dataTable var="contact" value="#{contactDataTable.contacts}" id="contactList"
+				
+				<p:dataTable  var="contact" value="#{contactDataTable.contacts}" id="contactList"
 					editable="true">
 
 					 <p:ajax event="rowEdit" listener="#{contactDataTable.onEdit}"
-						update="@this :form:messages" />
+						update="@this :form:messages"  />
 
 					<f:facet name="header">  
             Contatos

@@ -2,6 +2,7 @@ package br.com.webfinance.model;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Reference;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class FinancialEntry {
 
 	@Id
-	private int entryId;
+	private ObjectId _id;
 	private String name;
 	private String description;
 	@Reference
@@ -22,7 +23,6 @@ public class FinancialEntry {
 	private double value;
 	private double totalValue;
 	
-	@Reference
 	private EntryType entryType;
 	private boolean closed;
 	
@@ -40,7 +40,7 @@ public class FinancialEntry {
 		int result = 1;
 		result = prime * result
 				+ ((category == null) ? 0 : category.hashCode());
-		result = prime * result + entryId;
+		result = prime * result + _id.hashCode();
 		result = prime * result
 				+ ((entryType == null) ? 0 : entryType.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -61,7 +61,7 @@ public class FinancialEntry {
 				return false;
 		} else if (!category.equals(other.category))
 			return false;
-		if (entryId != other.entryId)
+		if (!_id.equals(other._id))
 			return false;
 		if (entryType == null) {
 			if (other.entryType != null)
@@ -76,13 +76,6 @@ public class FinancialEntry {
 		return true;
 	}
 
-	public int getEntryId() {
-		return entryId;
-	}
-
-	public void setEntryId(int entryId) {
-		this.entryId = entryId;
-	}
 
 	public String getName() {
 		return name;
@@ -176,6 +169,23 @@ public class FinancialEntry {
 
 	public void setMaturityDay(int maturityDay) {
 		this.maturityDay = maturityDay;
+	}
+
+	public ObjectId get_id() {
+		return _id;
+	}
+
+	public void set_id(ObjectId _id) {
+		this._id = _id;
+	}
+	
+
+	
+	public boolean isValid(){
+		boolean valid = true;
+		valid = name != null && name.length()>0;
+		valid = valid && ((closed && totalValue<=value) || (!closed && value<=totalValue));
+		return valid;
 	}
 	
 }

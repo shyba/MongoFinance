@@ -22,7 +22,7 @@
 //	
 //	@Test
 //	public void test() {
-//		new ContactDataTable().getContacts();
+//		new ContactDataTableTest().contactRepo.findAll();
 //	}
 //
 //}
