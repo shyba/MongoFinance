@@ -16,7 +16,7 @@
 				<p:growl id="messages" showDetail="true" />
 				
 				<p:dataTable  var="contact" value="#{contactDataTable.contacts}" id="contactList"
-					editable="true">
+					editable="true" >
 
 					 <p:ajax event="rowEdit" listener="#{contactDataTable.onEdit}"
 						update="@this :form:messages"  />
@@ -26,7 +26,7 @@
         </f:facet>
 
 
-					<p:column headerText="Nome" style="width:125px">
+					<p:column headerText="Nome" width="250">
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{contact.name}" />
@@ -70,76 +70,19 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Options" style="width:50px">
-						<p:rowEditor />
+					<p:column headerText="Options" width="125">
+						<p:commandButton  value="Editar"  />
 					</p:column>
 
 				</p:dataTable>
+			<p:commandButton value="Adicionar"  action="contactsForm.xhtml" />
 
 			</h:form>
 		</ui:define>
 		
 		
 		
-		
-		
-		<ui:define name="footer">
-		<br/><br/>
-		<h:form >
-<p:fieldset legend="Adicionar Contato" widgetVar="regWidget" style="width: 600px;">
-   <h:panelGrid columns="3" width="550" border="0">
-    <h:outputLabel value="Nome" />
-    <p:inputText value="#{contactDataTable.contact.name}" 
-       id="Name"
-        required="true" 
-        requiredMessage="Nome do contato é obrigatório!"
-        validatorMessage="Nome do contato deve ter entre 3 e 120 catacteres!"
-        >
-     <f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
-    </p:inputText>
-    <p:message for="Name"/>
-    
-    <h:outputLabel value="Email" />
-    <p:inputText value="#{contactDataTable.contact.mail}" 
-       id="Email"
-        required="true" 
-        requiredMessage="Email do contato é obrigatório!"
-        validatorMessage="Email do contato deve ter entre 3 e 120 catacteres!"
-        >
-     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
-    </p:inputText>
-    <p:message for="Email"/>
-    
-    <h:outputLabel value="Celular" />
-    <p:inputText value="#{contactDataTable.contact.mobileNumber}" 
-       id="Celular"
-        required="false" 
-        requiredMessage="Celular do contato é obrigatório!"
-        validatorMessage="Celular do contato deve ter entre 3 e 120 catacteres!"
-        >
-     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
-    </p:inputText>
-    <p:message for="Celular"/>
-    
-    <h:outputLabel value="Fixo" />
-    <p:inputText value="#{contactDataTable.contact.homeNumber}" 
-       id="Fixo"
-        required="false" 
-        requiredMessage="Fixo do contato é obrigatório!"
-        validatorMessage="Fixo do contato deve ter entre 3 e 120 catacteres!"
-        >
-     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
-    </p:inputText>
-    <p:message for="Fixo"/>
-    
-    <p:commandButton value="Adicionar" action="#{contactDataTable.register}" ajax="false" ></p:commandButton>
-    </h:panelGrid>
-    </p:fieldset>
-
-
-</h:form> 
-		</ui:define>
-		
+	
 	</ui:composition>
 
 </h:body>

@@ -25,7 +25,7 @@
 					>
 
 					<f:facet name="header">  
-            Lançamentos simples
+            Lançamentos parcelados
         </f:facet>
 
 					<p:ajax event="rowEdit"
@@ -34,7 +34,7 @@
 					<!-- <p:ajax event="rowEditCancel" listener="#{installmentFinancialEntryBean.onCancel}"
 						update=":form:messages" /> -->
 
-					<p:column headerText="Nome" style="width:125px">
+					<p:column headerText="Nome" >
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{financialEntry.name}" />
@@ -45,7 +45,7 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Descrição" style="width:125px">
+					<p:column headerText="Descrição" >
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{financialEntry.description}" />
@@ -97,7 +97,7 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Dia do Vencimento" style="width:25px">
+					<p:column headerText="Vencimento" style="width:25px">
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{financialEntry.maturityDay}" />
@@ -109,7 +109,7 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Data inicial" style="width:125px">
+					<p:column headerText="Data inicial" >
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{financialEntry.initialDate}">
@@ -123,7 +123,7 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Data final" style="width:125px">
+					<p:column headerText="Data final" >
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{financialEntry.finalDate}">
@@ -137,24 +137,9 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Parcela/total" width="250">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{financialEntry.paidInstallments}" /> /
-								<h:outputText value="#{financialEntry.installments}" />
-							</f:facet>
-							<f:facet name="input"  >
-								<p:splitButton value="Editar" icon="ui-icon-disk" >
-									<p:menuitem value="Total" oncomplete="totInstEditDlg.show();" 
-										icon="ui-icon-arrowrefresh-1-w" />
-									<p:menuitem value="Pagas" ajax="false" oncomplete="dlg3.show();" 
-										icon="ui-icon-close" />
-								</p:splitButton>
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
 
-					<p:column headerText="Valor pago/recebido" style="width:125px">
+
+					<p:column headerText="Efetivo" >
 						<p:cellEditor>
 							<f:facet name="output">
 								R$<h:outputText value="#{financialEntry.value}" />
@@ -166,7 +151,7 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Total" style="width:125px">
+					<p:column headerText="Total" >
 						<p:cellEditor>
 							<f:facet name="output">
 								R$<h:outputText value="#{financialEntry.totalValue}" />
@@ -178,7 +163,7 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Realizado" style="width:125px">
+					<p:column headerText="Realizado" >
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="Sim" rendered="#{financialEntry.closed}" />
@@ -197,134 +182,17 @@
 					</p:column>
 
 
-					<p:column headerText="Options" style="width:50px">
-						<p:rowEditor />
+					<p:column headerText="Options" >
+						<p:commandButton value="Editar"  action="contactsForm.xhtml" />
 
 					</p:column>
 
 				</p:dataTable>
-
+<p:commandButton value="Adicionar"  action="installmentsForm.xhtml" />
 			</h:form>
 
 
-<p:dialog id="totalInstEdit" header="Editar total de parcelas" widgetVar="totInstEditDlg">  
-    <h:outputText value="Entre com o novo total e a data final será atualizada!" />
-
-</p:dialog> 
-
-
-
-
-
-			<h:form>
-				<br />
-				<p:fieldset legend="Adicionar Categoria" widgetVar="regWidget"
-					style="width: 600px;">
-					<h:panelGrid columns="3" width="300" border="0">
-
-						<h:outputLabel value="Nome" />
-						<p:inputText
-							value="#{installmentFinancialEntryBean.financialEntry.name}"
-							id="Name" required="true"
-							requiredMessage="Nome do lançamento é obrigatório!"
-							validatorMessage="Nome do lançamento deve ter entre 3 e 120 catacteres!">
-							<f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
-						</p:inputText>
-						<p:message for="Name" />
-
-						<h:outputLabel value="Descrição" />
-						<p:inputText
-							value="#{installmentFinancialEntryBean.financialEntry.description}"
-							id="Description" required="true"
-							requiredMessage="Descrição da categoria é obrigatório!"
-							validatorMessage="Descrição do lançamento deve ter entre 3 e 120 catacteres!">
-							<f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
-						</p:inputText>
-						<p:message for="Description" />
-
-						<h:outputText value="Tipo de lançamento " />
-						<p:selectOneRadio id="entryType"
-							requiredMessage="Tipo de lançamento é obrigatório!"
-							required="true"
-							value="#{installmentFinancialEntryBean.financialEntry.entryType}">
-							<f:selectItems
-								value="#{installmentFinancialEntryBean.entryTypes}" var="et"
-								itemValue="#{et}" itemLabel="#{et.label}" />
-
-						</p:selectOneRadio>
-						<p:message for="entryType" />
-
-						<h:outputLabel value="Categoria" />
-						<p:selectOneMenu id="itemCategory"
-							converter="#{categoryConverter}"
-							value="#{installmentFinancialEntryBean.financialEntry.category}">
-							<f:selectItem itemLabel="Nenhuma" itemValue="" />
-							<f:selectItems
-								value="#{installmentFinancialEntryBean.categories}" var="cat"
-								itemLabel="#{cat.name}" itemValue="#{cat}" />
-
-						</p:selectOneMenu>
-						<br />
-
-						<h:outputLabel value="Dia do vencimento" />
-						<p:spinner id="entryDay" min="1" max="31"
-							value="#{installmentFinancialEntryBean.financialEntry.maturityDay}"
-							size="2" />
-						<br />
-						<h:outputLabel value="Data de início" />
-						<p:calendar
-							value="#{installmentFinancialEntryBean.financialEntry.initialDate}"
-							locale="pt" showButtonPanel="true" navigator="true" id="initCal" />
-						<br />
-
-						<h:outputLabel value="Data final" />
-						<p:calendar
-							value="#{installmentFinancialEntryBean.financialEntry.finalDate}"
-							locale="pt" showButtonPanel="true" navigator="true" id="finalCal" />
-
-						<br />
-						<h:outputLabel value="Número de Parcelas" />
-						<p:spinner id="newInstallments" min="1" max="31"
-							value="#{installmentFinancialEntryBean.newInstallments}" size="2" />
-						<br />
-						<br />
-						<h:outputLabel value="Valor pago/recebido" />
-						<p:spinner
-							value="#{installmentFinancialEntryBean.financialEntry.value}"
-							id="value" prefix="R$" min="0" stepFactor="0.50" size="12" />
-						<br />
-						<h:outputLabel value="Valor total" />
-						<p:spinner
-							value="#{installmentFinancialEntryBean.financialEntry.totalValue}"
-							id="total" prefix="R$" min="0" stepFactor="0.50" size="12" />
-						<br />
-						<h:outputText value="Quitado?" />
-						<p:selectOneRadio id="entryClosed"
-							requiredMessage="Estado do lançamento é obrigatório!"
-							required="true"
-							value="#{installmentFinancialEntryBean.financialEntry.closed}">
-							<f:selectItem itemLabel="Sim" itemValue="true" />
-							<f:selectItem itemLabel="Não" itemValue="false" />
-						</p:selectOneRadio>
-						<p:message for="entryClosed" />
-
-
-						<br />
-						<p:commandButton value="Adicionar"
-							action="#{installmentFinancialEntryBean.register}" ajax="false"></p:commandButton>
-
-					</h:panelGrid>
-				</p:fieldset>
-				<p:tooltip for="finalCal"
-					value="Escolha entre a data final ou quantidade de parcelas"
-					showEffect="slide" hideEffect="slide" />
-				<p:tooltip for="newInstallments"
-					value="Escolha entre a data final ou quantidade de parcelas"
-					showEffect="slide" hideEffect="slide" />
-
-
-			</h:form>
-		</ui:define>
+</ui:define>
 
 	</ui:composition>
 

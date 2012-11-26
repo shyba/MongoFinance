@@ -27,37 +27,21 @@
             Categorias
         </f:facet>
 
-					<!-- <p:ajax event="rowEditCancel" listener="#{categoryBean.onCancel}"
-						update=":form:messages" /> -->
+
 
 					<p:column headerText="Nome" style="width:125px">
-						<p:cellEditor>
-							<f:facet  name="output" >
+
 								<h:outputText value="#{category.name}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{category.name}" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 					<p:column headerText="SuperCategoria" style="width:125px">
-						<p:cellEditor>
-							<f:facet name="output">
+						
+							
 								<h:outputText value="#{category.superCategory}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:selectOneMenu id="editSuperCategory"
-									converter="#{categoryConverter}"
-									value="#{category.superCategory}">
-									<f:selectItem itemLabel="Nenhuma" itemValue="" />
-									<f:selectItems value="#{categoryBean.superCategories}"
-										var="sup" itemLabel="#{sup.name}" itemValue="#{sup}" />
-									
-								</p:selectOneMenu>
-							</f:facet>
 
-						</p:cellEditor>
+
+	
 						
 				
 						
@@ -66,53 +50,21 @@
 
 
 					<p:column headerText="Options" style="width:50px">
-						<p:rowEditor  />
 
+<p:commandButton value="Editar"  action="categoriesForm.xhtml" />
 
 
 
 					</p:column>
 
 				</p:dataTable>
-
+<p:commandButton value="Adicionar"  action="categoriesForm.xhtml" />
 			</h:form>
 									
 
 
 
-
-
-			<h:form>
-				<br />
-				<p:fieldset legend="Adicionar Categoria" widgetVar="regWidget"
-					style="width: 600px;">
-					<h:panelGrid columns="3" width="550" border="0">
-						<h:outputLabel value="Nome" />
-						<p:inputText value="#{categoryBean.category.name}" id="Name"
-							required="true"
-							requiredMessage="Nome da categoria é obrigatório!"
-							validatorMessage="Nome da categoria deve ter entre 3 e 120 catacteres!">
-							<f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
-						</p:inputText>
-						<p:message for="Name" />
-
-						<h:outputLabel value="Super Categoria" />
-						<p:selectOneMenu id="superCategory"
-							value="#{categoryBean.itemSuperCategory}">
-							<f:selectItem itemLabel="Nenhuma" itemValue="" />
-							<f:selectItems value="#{categoryBean.superCategoriesNames}" />
-						</p:selectOneMenu>
-						<p:message for="superCategory" />
-
-
-						<p:commandButton value="Adicionar"
-							action="#{categoryBean.register}" ajax="false"></p:commandButton>
-					</h:panelGrid>
-				</p:fieldset>
-
-
-			</h:form>
-			</f:view>
+	</f:view>
 		</ui:define>
 
 	</ui:composition>

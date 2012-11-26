@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+
+	<ui:composition template="mainLayout.xhtml">
+		<ui:define name="content">
+
+
+
+
+			<h:form id="form">
+
+				<p:growl id="messages" showDetail="true" />
+
+				<p:dataTable emptyMessage="Nenhum resultado encontrado."
+					var="financialEntry" value="#{budgetBean.financialEntries}"
+					id="financialEntryList" editable="true">
+
+					<f:facet name="header">  
+            Orçamento
+        </f:facet>
+
+
+
+					<p:column headerText="Nome" >
+
+
+						<h:outputText value="#{financialEntry.name}" />
+
+
+					</p:column>
+
+					<p:column headerText="Descrição" >
+
+
+						<h:outputText value="#{financialEntry.description}" />
+
+
+					</p:column>
+
+					<p:column headerText="Tipo de lançamento" style="width:25px">
+
+
+						<h:outputText value="#{financialEntry.entryType.label}" />
+
+					</p:column>
+
+
+
+					<p:column headerText="Vencimento" >
+
+
+						<h:outputText value="#{financialEntry.maturityDay}" /> /
+								<h:outputText value="#{financialEntry.maturityMonth}" /> /
+								<h:outputText value="#{financialEntry.maturityYear}" />
+
+
+					</p:column>
+
+					<p:column headerText="Pagamento" >
+
+
+						<h:outputText value="#{financialEntry.paymentDate}">
+							<f:convertDateTime pattern="d / MM / yyyy" />
+						</h:outputText>
+
+
+					</p:column>
+
+					<p:column headerText="Efetivo" >
+						
+							
+								R$<h:outputText value="#{financialEntry.value}" />
+
+					</p:column>
+
+					<p:column headerText="Total" >
+						
+							
+								R$<h:outputText value="#{financialEntry.totalValue}" />
+
+
+					</p:column>
+
+					<p:column headerText="Realizado" >
+
+
+						<h:outputText value="Sim" rendered="#{financialEntry.closed}" />
+						<h:outputText value="Não" rendered="#{not financialEntry.closed}" />
+
+
+					</p:column>
+
+
+
+				</p:dataTable>
+
+			</h:form>
+
+
+
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

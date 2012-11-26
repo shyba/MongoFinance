@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+
+	<ui:composition template="mainLayout.xhtml">
+		<ui:define name="content">
+
+
+			<h:form>
+				<br />
+				<p:fieldset legend="Adicionar Lançamento" widgetVar="regWidget"
+					style="width: 600px;">
+					<h:panelGrid columns="3" width="300" border="0">
+
+						<h:outputLabel value="Nome" />
+						<p:inputText
+							value="#{installmentFinancialEntryBean.financialEntry.name}"
+							id="Name" required="true"
+							requiredMessage="Nome do lançamento é obrigatório!"
+							validatorMessage="Nome do lançamento deve ter entre 3 e 120 catacteres!">
+							<f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
+						</p:inputText>
+						<p:message for="Name" />
+
+						<h:outputLabel value="Descrição" />
+						<p:inputText
+							value="#{installmentFinancialEntryBean.financialEntry.description}"
+							id="Description" required="true"
+							requiredMessage="Descrição da categoria é obrigatório!"
+							validatorMessage="Descrição do lançamento deve ter entre 3 e 120 catacteres!">
+							<f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
+						</p:inputText>
+						<p:message for="Description" />
+
+						<h:outputText value="Tipo de lançamento " />
+						<p:selectOneRadio id="entryType"
+							requiredMessage="Tipo de lançamento é obrigatório!"
+							required="true"
+							value="#{installmentFinancialEntryBean.financialEntry.entryType}">
+							<f:selectItems
+								value="#{installmentFinancialEntryBean.entryTypes}" var="et"
+								itemValue="#{et}" itemLabel="#{et.label}" />
+
+						</p:selectOneRadio>
+						<p:message for="entryType" />
+
+						<h:outputLabel value="Categoria" />
+						<p:selectOneMenu id="itemCategory"
+							converter="#{categoryConverter}"
+							value="#{installmentFinancialEntryBean.financialEntry.category}">
+							<f:selectItem itemLabel="Nenhuma" itemValue="" />
+							<f:selectItems
+								value="#{installmentFinancialEntryBean.categories}" var="cat"
+								itemLabel="#{cat.name}" itemValue="#{cat}" />
+
+						</p:selectOneMenu>
+						<br />
+
+						<h:outputLabel value="Dia do vencimento" />
+						<p:spinner id="entryDay" min="1" max="31"
+							value="#{installmentFinancialEntryBean.financialEntry.maturityDay}"
+							size="2" />
+						<br />
+						<h:outputLabel value="Data de início" />
+						<p:calendar
+							value="#{installmentFinancialEntryBean.financialEntry.initialDate}"
+							locale="pt" showButtonPanel="true" navigator="true" id="initCal" />
+						<br />
+
+						<h:outputLabel value="Data final" />
+						<p:calendar
+							value="#{installmentFinancialEntryBean.financialEntry.finalDate}"
+							locale="pt" showButtonPanel="true" navigator="true" id="finalCal" />
+
+						<br />
+						<h:outputLabel value="Número de Parcelas" />
+						<p:spinner id="newInstallments" min="1" max="31"
+							value="#{installmentFinancialEntryBean.newInstallments}" size="2" />
+						<br />
+						<br />
+						<h:outputLabel value="Valor pago/recebido" />
+						<p:spinner
+							value="#{installmentFinancialEntryBean.financialEntry.value}"
+							id="value" prefix="R$" min="0" stepFactor="0.50" size="12" />
+						<br />
+						<h:outputLabel value="Valor total" />
+						<p:spinner
+							value="#{installmentFinancialEntryBean.financialEntry.totalValue}"
+							id="total" prefix="R$" min="0" stepFactor="0.50" size="12" />
+						<br />
+						<h:outputText value="Quitado?" />
+						<p:selectOneRadio id="entryClosed"
+							requiredMessage="Estado do lançamento é obrigatório!"
+							required="true"
+							value="#{installmentFinancialEntryBean.financialEntry.closed}">
+							<f:selectItem itemLabel="Sim" itemValue="true" />
+							<f:selectItem itemLabel="Não" itemValue="false" />
+						</p:selectOneRadio>
+						<p:message for="entryClosed" />
+
+
+						<br />
+						<p:commandButton value="Adicionar"
+							action="#{installmentFinancialEntryBean.register}" ajax="false"></p:commandButton>
+
+					</h:panelGrid>
+				</p:fieldset>
+				<p:tooltip for="finalCal"
+					value="Escolha entre a data final ou quantidade de parcelas"
+					showEffect="slide" hideEffect="slide" />
+				<p:tooltip for="newInstallments"
+					value="Escolha entre a data final ou quantidade de parcelas"
+					showEffect="slide" hideEffect="slide" />
+
+
+			</h:form>
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>
