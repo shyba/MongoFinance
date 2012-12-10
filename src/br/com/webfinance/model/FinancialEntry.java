@@ -5,6 +5,7 @@ import java.util.Date;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Reference;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -25,6 +26,11 @@ public class FinancialEntry {
 	
 	private EntryType entryType;
 	private boolean closed;
+	
+	@DBRef
+	private UserAccount user;
+	@DBRef
+	private Budget budget;
 	
 	public FinancialEntry(String name, double totalValue,
 			EntryType entryType) {
@@ -130,6 +136,14 @@ public class FinancialEntry {
 		return closed;
 	}
 
+	public Budget getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Budget budget) {
+		this.budget = budget;
+	}
+
 	public void setClosed(boolean closed) {
 		this.closed = closed;
 	}
@@ -186,6 +200,14 @@ public class FinancialEntry {
 		valid = name != null && name.length()>0;
 		valid = valid && ((closed && totalValue<=value) || (!closed && value<=totalValue));
 		return valid;
+	}
+
+	public UserAccount getUser() {
+		return user;
+	}
+
+	public void setUser(UserAccount user) {
+		this.user = user;
 	}
 	
 }

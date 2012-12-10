@@ -2,6 +2,7 @@ package br.com.webfinance.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -11,6 +12,9 @@ public class Category {
 	private ObjectId _id;
 	private String name;
 	private Category superCategory;
+	
+	@DBRef
+	private UserAccount user;
 
 	public Category() {
 
@@ -86,6 +90,14 @@ public class Category {
 
 	public void set_id(ObjectId _id) {
 		this._id = _id;
+	}
+
+	public UserAccount getUser() {
+		return user;
+	}
+
+	public void setUser(UserAccount user) {
+		this.user = user;
 	}
 
 }

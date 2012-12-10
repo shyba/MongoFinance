@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Months;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Reference;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -29,6 +30,11 @@ public class InstallmentFinancialEntry {
 
 	private Date initialDate;
 	private Date finalDate;
+	
+	@DBRef
+	private UserAccount user;
+	@DBRef
+	private Budget budget;
 
 
 	public InstallmentFinancialEntry(String name, double totalValue,
@@ -128,6 +134,14 @@ public class InstallmentFinancialEntry {
 		this.closed = closed;
 	}
 
+	public Budget getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Budget budget) {
+		this.budget = budget;
+	}
+
 	public EntryType getEntryType() {
 		return entryType;
 	}
@@ -212,6 +226,14 @@ public class InstallmentFinancialEntry {
 				return true;
 		}
 		return false;
+	}
+
+	public UserAccount getUser() {
+		return user;
+	}
+
+	public void setUser(UserAccount user) {
+		this.user = user;
 	}
 
 }

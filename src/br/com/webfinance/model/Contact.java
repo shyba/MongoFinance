@@ -2,9 +2,8 @@ package br.com.webfinance.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 @Document(collection="contacts")
 public class Contact {
@@ -25,6 +24,8 @@ public class Contact {
 	private String mobileNumber;
 	private String homeNumber;
 
+	@DBRef
+	private UserAccount user;
 
 
 
@@ -128,6 +129,18 @@ public class Contact {
 
 	public void set_id(ObjectId _id) {
 		this._id = _id;
+	}
+
+
+
+	public UserAccount getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(UserAccount user) {
+		this.user = user;
 	}
 	
 	

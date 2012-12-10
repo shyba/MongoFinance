@@ -28,167 +28,94 @@
             Lançamentos parcelados
         </f:facet>
 
-					<p:ajax event="rowEdit"
-						listener="#{installmentFinancialEntryBean.onEdit}"
-						update=":form:messages" />
-					<!-- <p:ajax event="rowEditCancel" listener="#{installmentFinancialEntryBean.onCancel}"
-						update=":form:messages" /> -->
+
 
 					<p:column headerText="Nome" >
-						<p:cellEditor>
-							<f:facet name="output">
+
 								<h:outputText value="#{financialEntry.name}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{financialEntry.name}" style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 					<p:column headerText="Descrição" >
-						<p:cellEditor>
-							<f:facet name="output">
+
 								<h:outputText value="#{financialEntry.description}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{financialEntry.description}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 					<p:column headerText="Tipo de lançamento" style="width:25px">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{financialEntry.entryType.label}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:selectOneRadio id="entryType"
-									requiredMessage="Tipo de lançamento é obrigatório!"
-									required="true" value="#{financialEntry.entryType}">
-									<f:selectItems
-										value="#{installmentFinancialEntryBean.entryTypes}" var="et"
-										itemValue="#{et}" itemLabel="#{et.label}" />
 
-								</p:selectOneRadio>
-							</f:facet>
-						</p:cellEditor>
+								<h:outputText value="#{financialEntry.entryType.label}" />
+
 					</p:column>
 
 
 
 					<p:column headerText="Categoria" width="250">
-						<p:cellEditor>
-							<f:facet name="output">
+
 								<h:outputText value="#{financialEntry.category}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:selectOneMenu id="editSuperCategory"
-									converter="#{categoryConverter}"
-									value="#{financialEntry.category}">
-									<f:selectItem itemLabel="Nenhuma" itemValue="" />
-									<f:selectItems
-										value="#{installmentFinancialEntryBean.categories}" var="sup"
-										itemLabel="#{sup.name}" itemValue="#{sup}" />
 
-								</p:selectOneMenu>
-							</f:facet>
-
-						</p:cellEditor>
 					</p:column>
 
 					<p:column headerText="Vencimento" style="width:25px">
-						<p:cellEditor>
-							<f:facet name="output">
+
 								<h:outputText value="#{financialEntry.maturityDay}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{financialEntry.maturityDay}"
-									style="width:24px" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 					<p:column headerText="Data inicial" >
-						<p:cellEditor>
-							<f:facet name="output">
+
 								<h:outputText value="#{financialEntry.initialDate}">
 									<f:convertDateTime pattern="d/MM/yyyy" />
 								</h:outputText>
-							</f:facet>
-							<f:facet name="input">
-								<p:calendar pattern="d/MM/yyyy"
-									value="#{financialEntry.initialDate}" id="inipPopupCal" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 					<p:column headerText="Data final" >
-						<p:cellEditor>
-							<f:facet name="output">
+
 								<h:outputText value="#{financialEntry.finalDate}">
 									<f:convertDateTime pattern="d/MM/yyyy" />
 								</h:outputText>
-							</f:facet>
-							<f:facet name="input">
-								<p:calendar pattern="d/MM/yyyy"
-									value="#{financialEntry.finalDate}" id="finPopupCal" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 
 
 					<p:column headerText="Efetivo" >
-						<p:cellEditor>
-							<f:facet name="output">
+
 								R$<h:outputText value="#{financialEntry.value}" />
-							</f:facet>
-							<f:facet name="input">
-								R$<p:inputText value="#{financialEntry.value}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 					<p:column headerText="Total" >
-						<p:cellEditor>
-							<f:facet name="output">
+
 								R$<h:outputText value="#{financialEntry.totalValue}" />
-							</f:facet>
-							<f:facet name="input">
-								R$<p:inputText value="#{financialEntry.totalValue}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 					<p:column headerText="Realizado" >
-						<p:cellEditor>
-							<f:facet name="output">
+
 								<h:outputText value="Sim" rendered="#{financialEntry.closed}" />
 								<h:outputText value="Não"
 									rendered="#{not financialEntry.closed}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:selectOneRadio id="entryClosed"
-									requiredMessage="Estado do lançamento é obrigatório!"
-									required="true" value="#{financialEntry.closed}">
-									<f:selectItem itemLabel="Sim" itemValue="true" />
-									<f:selectItem itemLabel="Não" itemValue="false" />
-								</p:selectOneRadio>
-							</f:facet>
-						</p:cellEditor>
+
 					</p:column>
 
 
-					<p:column headerText="Options" >
-						<p:commandButton value="Editar"  action="contactsForm.xhtml" />
+					<p:column headerText="Opções" width="190" >
+
+                     <p:commandButton value="Editar"  onclick="location='/installmentsForm.xhtml?id=#{financialEntry._id}'"  />
+                     <p:commandButton value="Excluir" actionListener="#{installmentFinancialEntryBean.removeEntry}" update=":form">  
+     						<f:param id="itemId" name="itemId" value="#{financialEntry._id}" />  
+						</p:commandButton>
+						<p:commandButton value="Fechar" actionListener="#{installmentFinancialEntryBean.toggleClose}" update=":form">  
+     						<f:param id="itemId2" name="itemId" value="#{financialEntry._id}" />  
+						</p:commandButton>
 
 					</p:column>
 
 				</p:dataTable>
-<p:commandButton value="Adicionar"  action="installmentsForm.xhtml" />
+
+<p:commandButton value="Adicionar"  onclick="location='/installmentsForm.xhtml'"  />
 			</h:form>
 
 

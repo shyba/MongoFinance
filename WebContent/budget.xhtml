@@ -14,13 +14,13 @@
 
 
 
-			<h:form id="form">
+			<h:form id="form" >
 
-				<p:growl id="messages" showDetail="true" />
+				<p:growl id="messages" showDetail="true" autoUpdate="true" />
 
 				<p:dataTable emptyMessage="Nenhum resultado encontrado."
-					var="financialEntry" value="#{budgetBean.financialEntries}"
-					id="financialEntryList" editable="true">
+					var="budget" value="#{budgetBean.userBudgets}"
+					id="budgetList" editable="true"  style="width:40%" >
 
 					<f:facet name="header">  
             Orçamento
@@ -28,81 +28,34 @@
 
 
 
-					<p:column headerText="Nome" >
+					<p:column headerText="Nome" width="120" >
 
 
-						<h:outputText value="#{financialEntry.name}" />
-
-
-					</p:column>
-
-					<p:column headerText="Descrição" >
-
-
-						<h:outputText value="#{financialEntry.description}" />
+						<h:outputText value="#{budget.name}" />
 
 
 					</p:column>
-
-					<p:column headerText="Tipo de lançamento" style="width:25px">
-
-
-						<h:outputText value="#{financialEntry.entryType.label}" />
-
-					</p:column>
+					
+					<p:column headerText="Opções" width="380" >
 
 
 
-					<p:column headerText="Vencimento" >
+						<p:commandButton value="Selecionar"   update=":form">  
+     						<f:setPropertyActionListener value="#{budget}"  target="#{budgetBean.selectedBudget}" />  
+						</p:commandButton>
 
-
-						<h:outputText value="#{financialEntry.maturityDay}" /> /
-								<h:outputText value="#{financialEntry.maturityMonth}" /> /
-								<h:outputText value="#{financialEntry.maturityYear}" />
+                     <p:commandButton value="Editar"  onclick="location='/budgetForm.xhtml?id=#{budget._id}'"  />
+                     <p:commandButton value="Excluir" actionListener="#{budgetBean.removeBudget}" update=":form">  
+     						<f:param id="itemId" name="itemId" value="#{budget._id}" />  
+						</p:commandButton>
 
 
 					</p:column>
-
-					<p:column headerText="Pagamento" >
-
-
-						<h:outputText value="#{financialEntry.paymentDate}">
-							<f:convertDateTime pattern="d / MM / yyyy" />
-						</h:outputText>
-
-
-					</p:column>
-
-					<p:column headerText="Efetivo" >
-						
-							
-								R$<h:outputText value="#{financialEntry.value}" />
-
-					</p:column>
-
-					<p:column headerText="Total" >
-						
-							
-								R$<h:outputText value="#{financialEntry.totalValue}" />
-
-
-					</p:column>
-
-					<p:column headerText="Realizado" >
-
-
-						<h:outputText value="Sim" rendered="#{financialEntry.closed}" />
-						<h:outputText value="Não" rendered="#{not financialEntry.closed}" />
-
-
-					</p:column>
-
 
 
 				</p:dataTable>
 
 			</h:form>
-
 
 
 		</ui:define>

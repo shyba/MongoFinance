@@ -1,12 +1,15 @@
 package br.com.webfinance.beans;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 import org.primefaces.component.datatable.DataTable;
@@ -41,6 +44,20 @@ public class ContactDataTable {
 		
 //		    contacts.addAll(contactRepository.findAll());
 		}
+	    
+		
+		public void init(){
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+		    if (!facesContext.isPostback() && !facesContext.isValidationFailed()) {
+		    	Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		    	String id = params.get("id");
+		    	if(id!=null && !id.trim().isEmpty())
+		    		contact = contactRepository.findOne(id);
+		    	else
+		    		this.contact = new Contact("Nome do contato", "email@exemplo.com");
+		    }
+			 
+		}
 
 
 	    private void reload(){
@@ -49,6 +66,7 @@ public class ContactDataTable {
 	    }
 	    
 		public List<Contact> getContacts() {
+			reload();
 			return contacts;
 		}
 
@@ -91,6 +109,13 @@ public class ContactDataTable {
 
 		public void setContact(Contact contact) {
 			this.contact = contact;
+		}
+		
+		public void removeEntry(ActionEvent event)  
+		{  
+		   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+		   String itemId = parameter.getValue().toString();
+		   contactRepository.delete(itemId);
 		}
 	
 }

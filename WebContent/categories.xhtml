@@ -49,16 +49,18 @@
 
 
 
-					<p:column headerText="Options" style="width:50px">
-
-<p:commandButton value="Editar"  action="categoriesForm.xhtml" />
+					<p:column headerText="Opções" style="width:50px">
 
 
+                     <p:commandButton value="Editar"  onclick="location='/categoriesForm.xhtml?id=#{category._id}'"  />
+						 <p:commandButton value="Excluir" actionListener="#{categoryBean.removeEntry}" update=":form">  
+     						<f:param id="itemId" name="itemId" value="#{category._id}" />  
+						</p:commandButton>
 
 					</p:column>
 
 				</p:dataTable>
-<p:commandButton value="Adicionar"  action="categoriesForm.xhtml" />
+<p:commandButton value="Adicionar"  onclick="location='/categoriesForm.xhtml'"  />
 			</h:form>
 									
 

@@ -4,20 +4,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
+import br.com.webfinance.model.Budget;
 import br.com.webfinance.model.Category;
 import br.com.webfinance.model.EntryType;
 import br.com.webfinance.model.FinancialEntry;
+import br.com.webfinance.model.UserAccount;
 import br.com.webfinance.repo.CategoryRepository;
 import br.com.webfinance.repo.FinancialEntriesRepository;
 
@@ -38,7 +46,12 @@ public class FinancialEntryBean implements Serializable {
 	FinancialEntriesRepository financialEntriesRepository;
 	@Autowired
 	CategoryRepository categoryRepository;
-
+	@Autowired
+	LoginBean loginBean;
+	@Autowired
+	BudgetBean budgetBean;
+	
+	
 	public FinancialEntryBean() {
 		resetFinancialEntry();
 	}
@@ -53,10 +66,24 @@ public class FinancialEntryBean implements Serializable {
 		financialEntry.setPaymentDate(cal.getTime());
 
 	}
+	
+	public void init(){
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+	    if (!facesContext.isPostback() && !facesContext.isValidationFailed()) {
+	    	Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+	    	String id = params.get("id");
+	    	if(id!=null && !id.trim().isEmpty())
+	    		financialEntry = financialEntriesRepository.findOne(id);
+	    	else
+	    		resetFinancialEntry();
+	    }
+		 
+	}
 
 	public String register() {
 		if (financialEntry.getValue() > financialEntry.getTotalValue())
 			financialEntry.setClosed(true);
+		financialEntry.setBudget(budgetBean.getSelectedBudget());
 		if (financialEntry != null && financialEntry.isValid())
 			financialEntriesRepository.save(financialEntry);
 		FacesMessage msg = new FacesMessage("Lançamento salvo!",
@@ -112,15 +139,15 @@ public class FinancialEntryBean implements Serializable {
 	}
 
 	public List<FinancialEntry> getFinancialEntries() {
-		if (financialEntries == null || financialEntries.size() == 0) {
-			reloadEntries();
-		}
+
+		reloadEntries();
 		return financialEntries;
 	}
 
-	public void reloadEntries() {
+	public void reloadEntries() {	
+		
 		financialEntries = new ArrayList<FinancialEntry>();
-		financialEntries.addAll(financialEntriesRepository.findAll());
+		financialEntries.addAll(financialEntriesRepository.findByBudget(budgetBean.getSelectedBudget()));
 	}
 
 	public FinancialEntry getFinancialEntry() {
@@ -140,7 +167,26 @@ public class FinancialEntryBean implements Serializable {
 	}
 
 	public List<Category> getCategories() {
-		return categoryRepository.findAll();
+		return categoryRepository.findByUser(loginBean.getUser());
+	}
+	
+	public void removeEntry(ActionEvent event)  
+	{  
+	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+	   String itemId = parameter.getValue().toString();
+	   financialEntriesRepository.delete(itemId);
+	}
+	
+	public void toggleClose(ActionEvent event)  
+	{  
+	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+	   String itemId = parameter.getValue().toString();
+	   FinancialEntry entry = financialEntriesRepository.findOne(itemId);
+	   if(!entry.isClosed()){
+		   entry.setValue(entry.getTotalValue());
+	   }
+	   entry.setClosed(!entry.isClosed());
+	   financialEntriesRepository.save(entry);
 	}
 
 }

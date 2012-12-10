@@ -6,10 +6,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -17,12 +20,14 @@ import org.joda.time.Months;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import br.com.webfinance.model.Category;
 import br.com.webfinance.model.EntryType;
 import br.com.webfinance.model.FinancialEntry;
 import br.com.webfinance.model.InstallmentFinancialEntry;
+import br.com.webfinance.model.UserAccount;
 import br.com.webfinance.repo.CategoryRepository;
 import br.com.webfinance.repo.FinancialEntriesRepository;
 import br.com.webfinance.repo.InstallmentsRepository;
@@ -46,11 +51,26 @@ public class InstallmentFinancialEntryBean implements Serializable {
 	InstallmentsRepository installmentsRepository;
 	@Autowired
 	CategoryRepository categoryRepository;
+	@Autowired
+	BudgetBean budgetBean;
 	
 	
 
 	public InstallmentFinancialEntryBean() {
 		resetFinancialEntry();
+	}
+	
+	public void init(){
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+	    if (!facesContext.isPostback() && !facesContext.isValidationFailed()) {
+	    	Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+	    	String id = params.get("id");
+	    	if(id!=null && !id.trim().isEmpty())
+	    		financialEntry = installmentsRepository.findOne(id);
+	    	else
+	    		resetFinancialEntry();
+	    }
+		 
 	}
 
 	private void resetFinancialEntry() {
@@ -64,6 +84,7 @@ public class InstallmentFinancialEntryBean implements Serializable {
 	public String register() {
 		if (financialEntry.getValue() > financialEntry.getTotalValue())
 			financialEntry.setClosed(true);
+		financialEntry.setBudget(budgetBean.getSelectedBudget());
 		if (financialEntry != null && financialEntry.isValid())
 			installmentsRepository.save(financialEntry);
 		FacesMessage msg = new FacesMessage("Lançamento salvo!",
@@ -140,15 +161,14 @@ public class InstallmentFinancialEntryBean implements Serializable {
 	}
 
 	public List<InstallmentFinancialEntry> getFinancialEntries() {
-		if (financialEntries == null || financialEntries.size() == 0) {
-			reloadEntries();
-		}
+		reloadEntries();
 		return financialEntries;
 	}
 
 	public void reloadEntries() {
+		UserAccount user = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getDetails();
 		financialEntries = new ArrayList<InstallmentFinancialEntry>();
-		financialEntries.addAll(installmentsRepository.findAll());
+		financialEntries.addAll(installmentsRepository.findByBudget(budgetBean.getSelectedBudget()));
 	}
 
 	public InstallmentFinancialEntry getFinancialEntry() {
@@ -186,6 +206,25 @@ public class InstallmentFinancialEntryBean implements Serializable {
 	public void setEditingFinancialEntry(
 			InstallmentFinancialEntry editingFinancialEntry) {
 		this.editingFinancialEntry = editingFinancialEntry;
+	}
+	
+	public void removeEntry(ActionEvent event)  
+	{  
+	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+	   String itemId = parameter.getValue().toString();
+	   installmentsRepository.delete(itemId);
+	}
+	
+	public void toggleClose(ActionEvent event)  
+	{  
+	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+	   String itemId = parameter.getValue().toString();
+	   InstallmentFinancialEntry entry = installmentsRepository.findOne(itemId);
+	   if(!entry.isClosed()){
+		   entry.setValue(entry.getTotalValue());
+	   }
+	   entry.setClosed(!entry.isClosed());
+	   installmentsRepository.save(entry);
 	}
 
 }

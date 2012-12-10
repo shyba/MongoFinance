@@ -7,7 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.webfinance.model.Category;
-import br.com.webfinance.model.Contact;
+import br.com.webfinance.model.UserAccount;
 
 @Repository
 public interface CategoryRepository extends
@@ -20,4 +20,6 @@ public interface CategoryRepository extends
 	List<Category> findBySuperCategory(Category superCategory);
 
 	List<Category> findBy_id(ObjectId _id);
+	
+	List<Category> findByUser(UserAccount user);
 }

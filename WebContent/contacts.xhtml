@@ -70,12 +70,17 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Options" width="125">
-						<p:commandButton  value="Editar"  />
+					<p:column headerText="Opções" width="125">
+
+
+                    <p:commandButton value="Editar"  onclick="location='/contactsForm.xhtml?id=#{contact._id}'"  />
+											 <p:commandButton value="Excluir" actionListener="#{contactDataTable.removeEntry}" update=":form">  
+     						<f:param id="itemId" name="itemId" value="#{contact._id}" />  
+						</p:commandButton>
 					</p:column>
 
 				</p:dataTable>
-			<p:commandButton value="Adicionar"  action="contactsForm.xhtml" />
+			<p:commandButton value="Adicionar"  onclick="location='/contactsForm.xhtml'"  />
 
 			</h:form>
 		</ui:define>

@@ -3,13 +3,16 @@ package br.com.webfinance.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,19 @@ public class CategoryBean implements Serializable {
 		this.categoryRepository = categoryRepository;
 		reloadCategories();
 	}
+	
+	public void init(){
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+	    if (!facesContext.isPostback() && !facesContext.isValidationFailed()) {
+	    	Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+	    	String id = params.get("id");
+	    	if(id!=null && !id.trim().isEmpty())
+	    		category = categoryRepository.findOne(id);
+	    	else
+	    		this.category = new Category("Nome da Categoria");
+	    }
+		 
+	}
 
 	public Category getCategory() {
 		if (category == null)
@@ -49,7 +65,7 @@ public class CategoryBean implements Serializable {
 	}
 
 	public String register() {
-		if (categoryRepository.findByName(category.getName()).size() > 0) {
+		if (category.get_id()==null && categoryRepository.findByName(category.getName()).size() > 0) {
 			sendMessage("Este nome já existe!");
 			return "categories";
 		}
@@ -86,6 +102,7 @@ public class CategoryBean implements Serializable {
 	}
 
 	public List<Category> getCategories() {
+		reloadCategories();
 		return categories;
 	}
 
@@ -141,6 +158,18 @@ public class CategoryBean implements Serializable {
 
 	public void setCategoryRepository(CategoryRepository categoryRepository) {
 		this.categoryRepository = categoryRepository;
+	}
+	
+	public void removeEntry(ActionEvent event)  
+	{  
+	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+	   String itemId = parameter.getValue().toString();
+	   Category rm = categoryRepository.findOne(itemId);
+	   if(rm!=null)
+	   for(Category cat:categoryRepository.findBySuperCategory(rm)){
+		   categoryRepository.delete(cat);		   
+	   }
+	   categoryRepository.delete(itemId);
 	}
 
 }

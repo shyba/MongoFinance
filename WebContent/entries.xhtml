@@ -89,13 +89,18 @@
 					</p:column>
 
 
-					<p:column headerText="Opções" style="width:50px">
-						<p:commandButton value="Editar"  action="contactsForm.xhtml" />
-
+					<p:column headerText="Opções" width="190">
+<p:commandButton value="Editar"  onclick="location='/entriesForm.xhtml?id=#{financialEntry._id}'"  />
+											 <p:commandButton value="Excluir" actionListener="#{financialEntryBean.removeEntry}" update=":form">  
+     						<f:param id="itemId" name="itemId" value="#{financialEntry._id}" />  
+						</p:commandButton>
+						<p:commandButton value="Fechar" actionListener="#{financialEntryBean.toggleClose}" update=":form">  
+     						<f:param id="itemId2" name="itemId" value="#{financialEntry._id}" />  
+						</p:commandButton>
 					</p:column>
 
 				</p:dataTable>
-<p:commandButton value="Adicionar"  action="entriesForm.xhtml" />
+<p:commandButton value="Adicionar"  onclick="location='/entriesForm.xhtml'"  />
 			</h:form>
 
 

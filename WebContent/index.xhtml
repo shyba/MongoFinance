@@ -1,44 +1,44 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"> 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 
-</h:head> 
+</h:head>
 <h:body>
-<h:form >
-<p:fieldset legend="Adicionar/Editar Contato" widgetVar="regWidget" style="width: 600px;">
-   <h:panelGrid columns="3" width="550" border="0">
-    <h:outputLabel value="Nome" />
-    <p:inputText value="#{contactBean.contact.name}" 
-       id="Name"
-        required="true" 
-        requiredMessage="Nome do contato é obrigatório!"
-        validatorMessage="Nome do contato deve ter entre 3 e 120 catacteres!"
-        >
-     <f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
-    </p:inputText>
-    <p:message for="Name"/>
-    
-    <h:outputLabel value="Email" />
-    <p:inputText value="#{contactBean.contact.mail}" 
-       id="Email"
-        required="true" 
-        requiredMessage="Email do contato é obrigatório!"
-        validatorMessage="Email do contato deve ter entre 3 e 120 catacteres!"
-        >
-     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
-    </p:inputText>
-    <p:message for="Email"/>
-    
-    <p:commandButton value="Adicionar" action="#{contactBean.register}" ajax="false" ></p:commandButton>
-    </h:panelGrid>
-    </p:fieldset>
+	<h:form id="formLogin"  prependId="false">
+		<div class="form">
+			<p>
+				<p:message for="formLogin" id="messages"  />
+			</p>
+			<p>
+				<label>Usuário</label><br/>
+				<h:inputText id="j_username" label="User Name"
+					value="#{loginBean.userName}" required="true"  />
+				<label><p:message for="j_username" /></label>
+			</p>
+			<p>
+				<label>Password</label><br/>
+				<h:inputSecret id="j_password" label="Password"
+					value="#{loginBean.password}" required="true" />
+				<label><p:message for="j_password" /></label>
+			</p>
 
+		</div>
+		<!-- End Form -->
 
-</h:form> 
+		<!-- Form Buttons -->
+		<div class="buttons">
+			<p:commandButton type="submit" id="login" action="#{loginBean.login}"
+				value="Login" icon="ui-icon-person"  update=":formLogin:messages" />
+		</div>
+		<!-- End Form Buttons -->
+		<h:inputHidden value="#{loginBean.logoutHidden}" />
+
+<p:commandButton value="Cadastre-se"  onclick="location='/register.xhtml'"  />
+	</h:form>
 </h:body>
 </html>
