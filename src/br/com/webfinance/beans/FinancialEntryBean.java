@@ -29,6 +29,8 @@ import br.com.webfinance.model.UserAccount;
 import br.com.webfinance.repo.CategoryRepository;
 import br.com.webfinance.repo.FinancialEntriesRepository;
 
+import static br.com.webfinance.util.PageFlowConstants.ENTRIES;
+
 @Controller
 @Scope("session")
 public class FinancialEntryBean implements Serializable {
@@ -91,7 +93,7 @@ public class FinancialEntryBean implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		resetFinancialEntry();
 		reloadEntries();
-		return "entries";
+		return ENTRIES;
 	}
 
 	public EntryType[] getEntryTypes() {

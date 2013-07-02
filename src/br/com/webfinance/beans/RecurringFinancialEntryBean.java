@@ -1,5 +1,7 @@
 package br.com.webfinance.beans;
 
+import static br.com.webfinance.util.PageFlowConstants.RECURRING;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,11 +20,11 @@ import org.springframework.stereotype.Controller;
 
 import br.com.webfinance.model.Category;
 import br.com.webfinance.model.EntryType;
-import br.com.webfinance.model.InstallmentFinancialEntry;
 import br.com.webfinance.model.RecurrentFinancialEntry;
 import br.com.webfinance.model.RecurrentType;
 import br.com.webfinance.repo.CategoryRepository;
 import br.com.webfinance.repo.RecurrentRepository;
+import br.com.webfinance.util.Messages;
 
 @Controller
 @Scope("session")
@@ -65,8 +67,8 @@ public class RecurringFinancialEntryBean implements Serializable {
 	}
 
 	private void resetFinancialEntry() {
-		financialEntry = new RecurrentFinancialEntry("Nome", 14, EntryType.CREDIT, RecurrentType.MONTHLY);
-		financialEntry.setDescription("Descrição");
+		financialEntry = new RecurrentFinancialEntry("Nome", 14, EntryType.CREDIT, RecurrentType.MONTHLY); //$NON-NLS-1$
+		financialEntry.setDescription("Descrição"); //$NON-NLS-1$
 		Calendar cal = Calendar.getInstance();
 		financialEntry.setMaturityDay(cal.get(Calendar.DAY_OF_MONTH));
 
@@ -76,18 +78,18 @@ public class RecurringFinancialEntryBean implements Serializable {
 		if (financialEntry != null && financialEntry.isValid()){
 			financialEntry.setBudget(budgetBean.getSelectedBudget());			
 			recurrentRepository.save(financialEntry);
-			FacesMessage msg = new FacesMessage("Lançamento salvo!",
+			FacesMessage msg = new FacesMessage(Messages.getString("RecurringFinancialEntryBean.msgBudgetSave"), //$NON-NLS-1$
 					financialEntry.getName());
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}else{
-			FacesMessage msg = new FacesMessage("Dados inválidos!",
+			FacesMessage msg = new FacesMessage(Messages.getString("RecurringFinancialEntryBean.msgInvalidData"), //$NON-NLS-1$
 					financialEntry.getName());
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "recurringForm";
 		}
 		resetFinancialEntry();
 		reloadEntries();
-		return "recurring";
+		return RECURRING;
 	}
 
 	public EntryType[] getEntryTypes() {
@@ -144,14 +146,14 @@ public class RecurringFinancialEntryBean implements Serializable {
 	
 	public void removeEntry(ActionEvent event)  
 	{  
-	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");
 	   String itemId = parameter.getValue().toString();
 	   recurrentRepository.delete(itemId);
 	}
 	
 	public void toggleClose(ActionEvent event)  
 	{  
-	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");  
+	   UIParameter parameter = (UIParameter) event.getComponent().findComponent("itemId");
 	   String itemId = parameter.getValue().toString();
 	   RecurrentFinancialEntry entry = recurrentRepository.findOne(itemId);
 	   entry.setClosed(!entry.isClosed());

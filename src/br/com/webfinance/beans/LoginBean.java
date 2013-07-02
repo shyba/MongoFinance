@@ -1,6 +1,10 @@
 package br.com.webfinance.beans;
 
 
+import static br.com.webfinance.util.PageFlowConstants.INDEX;
+import static br.com.webfinance.util.PageFlowConstants.INSTALLMENTS;
+import static br.com.webfinance.util.PageFlowConstants.REGISTER;
+
 import java.io.Serializable;
 
 import javax.annotation.Resource;
@@ -8,8 +12,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,13 +22,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.mongodb.util.Hash;
-
-import br.com.webfinance.model.Role;
 import br.com.webfinance.model.UserAccount;
 import br.com.webfinance.repo.UserAccountRepository;
 import br.com.webfinance.service.UserService;
-
+import br.com.webfinance.util.Messages;
 
 
 
@@ -64,12 +63,12 @@ public class LoginBean  implements Serializable {
             SecurityContextHolder.getContext().setAuthentication(result);
             user = userAccountRepository.findByUsername(this.getUserName());
             System.out.println("Login Success! .. ");
-            return "installments";
+            return INSTALLMENTS;
         } catch (AuthenticationException ex) {
                 System.out.println("Login Failed");
-                FacesContext.getCurrentInstance().addMessage("formLogin", new FacesMessage(FacesMessage.SEVERITY_WARN,"Falha!", "Usuário ou senha inválidos!"));  
+                FacesContext.getCurrentInstance().addMessage("formLogin", new FacesMessage(FacesMessage.SEVERITY_WARN,"Falha!", Messages.getString("LoginBean.msgLoginFailed")));   //$NON-NLS-1$ //$NON-NLS-3$
              
-            return "index";
+            return INDEX;
         }
         }
         
@@ -80,14 +79,14 @@ public class LoginBean  implements Serializable {
         public String register(){
         	if(isValid(newUser.getFirstname()) && isValid(newUser.getLastname()) 
         			&& isValid(newUser.getUsername()) && isValid(newUser.getPassword())){
-        		String hashed = new MessageDigestPasswordEncoder("SHA-256").encodePassword(newUser.getPassword(), null);
+        		String hashed = new MessageDigestPasswordEncoder("SHA-256").encodePassword(newUser.getPassword(), null); //$NON-NLS-1$
         		newUser.setPassword(hashed);
         		newUser.addRole(userService.getRole("ROLE_USER"));
         		userService.create(newUser);
         		newUser = new UserAccount();
-        		return "index";
+        		return INDEX;
         	}
-        	return "register";
+        	return REGISTER;
         }
 
         public String logout() {
@@ -96,7 +95,7 @@ public class LoginBean  implements Serializable {
                 SecurityContextHolder.getContext().setAuthentication(null);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                                 .clear();
-                return "index";
+                return INDEX;
         }
         
         public String getLogoutHidden() {
@@ -105,7 +104,7 @@ public class LoginBean  implements Serializable {
                 SecurityContextHolder.getContext().setAuthentication(null);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                                 .clear();
-                return "index";
+                return INDEX;
         }
         
         public void setLogoutHidden(String logoutHidden) {

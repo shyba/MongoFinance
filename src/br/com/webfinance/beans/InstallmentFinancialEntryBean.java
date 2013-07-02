@@ -1,22 +1,21 @@
 package br.com.webfinance.beans;
 
+import static br.com.webfinance.util.PageFlowConstants.INSTALLMENTS;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.Months;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,11 +24,9 @@ import org.springframework.stereotype.Controller;
 
 import br.com.webfinance.model.Category;
 import br.com.webfinance.model.EntryType;
-import br.com.webfinance.model.FinancialEntry;
 import br.com.webfinance.model.InstallmentFinancialEntry;
 import br.com.webfinance.model.UserAccount;
 import br.com.webfinance.repo.CategoryRepository;
-import br.com.webfinance.repo.FinancialEntriesRepository;
 import br.com.webfinance.repo.InstallmentsRepository;
 
 @Controller
@@ -92,7 +89,7 @@ public class InstallmentFinancialEntryBean implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		resetFinancialEntry();
 		reloadEntries();
-		return "installments";
+		return INSTALLMENTS;
 	}
 
 	public EntryType[] getEntryTypes() {
