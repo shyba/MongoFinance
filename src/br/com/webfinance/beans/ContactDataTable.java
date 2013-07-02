@@ -1,29 +1,23 @@
 package br.com.webfinance.beans;
+import static br.com.webfinance.util.PageFlowConstants.CONTACTS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.apache.log4j.Logger;
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
-import br.com.webfinance.model.Category;
 import br.com.webfinance.model.Contact;
 import br.com.webfinance.repo.ContactRepository;
-
-
 @Controller
 @Scope("session")
 public class ContactDataTable { 
@@ -103,7 +97,7 @@ public class ContactDataTable {
 		   System.out.println("Saved! Count:"+contactRepository.count());
 		   this.contact=new Contact("Nome do contato", "email@exemplo.com");
 		   reload();
-		   return "contacts";//go to welcome.xhtml
+		   return CONTACTS;//go to welcome.xhtml
 		  }
 
 

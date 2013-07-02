@@ -21,6 +21,8 @@ import br.com.webfinance.model.UserAccount;
 import br.com.webfinance.repo.BudgetRepository;
 import br.com.webfinance.repo.UserAccountRepository;
 
+import static br.com.webfinance.util.PageFlowConstants.BUDGETFORM; 
+
 @Controller
 @Scope("session")
 public class BudgetBean implements Serializable {
@@ -73,7 +75,7 @@ public class BudgetBean implements Serializable {
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Este nome de orçamento já existe!",
 						registerBudget.getName());
 				FacesContext.getCurrentInstance().addMessage(null, msg);
-				return "budgetForm";
+				return BUDGETFORM;
 			}
 		}
 		if(registerBudget.get_id()==null){
@@ -91,7 +93,7 @@ public class BudgetBean implements Serializable {
 		registerBudget.setName("Novo");
 		loginBean.setUser(user);
 		selectedBudget = budgetRepository.findOne(selectedBudget.get_id());
-		return "budgetForm";
+		return BUDGETFORM;
 	}
 
 	public List<Budget> getUserBudgets() {
