@@ -22,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import br.com.webfinance.model.Category;
 import br.com.webfinance.repo.CategoryRepository;
 
+import static br.com.webfinance.util.PageFlowConstants.CATEGORIES;
+
 @Controller
 @Scope("session")
 public class CategoryBean implements Serializable {
@@ -67,7 +69,7 @@ public class CategoryBean implements Serializable {
 	public String register() {
 		if (category.get_id()==null && categoryRepository.findByName(category.getName()).size() > 0) {
 			sendMessage("Este nome já existe!");
-			return "categories";
+			return CATEGORIES;
 		}
 		if (getItemSuperCategory() != null
 				&& getItemSuperCategory().length() > 0)
@@ -81,7 +83,7 @@ public class CategoryBean implements Serializable {
 		this.category = new Category("Nome da Categoria");
 		itemSuperCategory = null;
 		reloadCategories();
-		return "categories";
+		return CATEGORIES;
 	}
 
 	private void sendMessage(String message) {
