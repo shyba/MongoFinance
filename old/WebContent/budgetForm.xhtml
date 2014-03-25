@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+			<f:metadata>
+        <f:event type="preRenderView" listener="#{budgetBean.init}" />
+    </f:metadata>
+<h:body>
+
+	<ui:composition template="mainLayout.xhtml">
+		<ui:define name="content">
+
+
+
+			<f:view>
+
+			<h:form>
+				<br />
+				<p:fieldset legend="Adicionar Orçamento" widgetVar="regWidget"
+					style="width: 600px;">
+					<h:panelGrid columns="3" width="550" border="0">
+						<h:outputLabel value="Nome" />
+						<p:inputText value="#{budgetBean.registerBudget.name}" id="Name"
+							required="true"
+							requiredMessage="Nome do orçamento é obrigatório!"
+							validatorMessage="Nome do orçamento deve ter entre 3 e 120 catacteres!">
+							<f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
+						</p:inputText>
+						<p:message for="Name" />
+
+						<p:commandButton value="Adicionar"
+							action="#{budgetBean.register}" ajax="false"></p:commandButton>
+					</h:panelGrid>
+				</p:fieldset>
+
+
+			</h:form>
+			</f:view>
+		</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+
+	<ui:composition template="mainLayout.xhtml">
+		<ui:define name="content">
+
+
+
+
+			<h:form id="form">
+
+				<p:growl id="messages" showDetail="true" />
+
+				<p:dataTable emptyMessage="Nenhum resultado encontrado."
+					var="financialEntry" value="#{financialEntryBean.financialEntries}"
+					id="financialEntryList" editable="true">
+
+					<f:facet name="header">  
+            Lançamentos simples
+        </f:facet>
+
+
+					<p:column headerText="Nome" >
+
+								<h:outputText value="#{financialEntry.name}" />
+
+					</p:column>
+
+					<p:column headerText="Descrição" >
+
+								<h:outputText value="#{financialEntry.description}" />
+
+					</p:column>
+
+					<p:column headerText="Tipo" width="60">
+
+								<h:outputText value="#{financialEntry.entryType.label}" />
+
+					</p:column>
+					
+					
+					
+					<p:column headerText="Categoria" >
+
+								<h:outputText value="#{financialEntry.category}" />
+
+					</p:column>
+					
+					<p:column headerText="Vencimento" >
+
+								<h:outputText value="#{financialEntry.maturityDay}" /> /
+								<h:outputText value="#{financialEntry.maturityMonth}" /> /
+								<h:outputText value="#{financialEntry.maturityYear}" />
+
+					</p:column>
+					
+					<p:column headerText="Pagamento">
+
+								<h:outputText value="#{financialEntry.paymentDate}"  >
+									<f:convertDateTime pattern="d / MM / yyyy" />
+								</h:outputText>
+
+					</p:column>
+
+					<p:column headerText="Efetivo" >
+
+								R$<h:outputText value="#{financialEntry.value}" />
+
+					</p:column>
+
+					<p:column headerText="Total" >
+
+								R$<h:outputText value="#{financialEntry.totalValue}" />
+
+					</p:column>
+					
+					<p:column headerText="Realizado" >
+
+								<h:outputText value="Sim" rendered="#{financialEntry.closed}" />
+								<h:outputText value="Não" rendered="#{not financialEntry.closed}" />
+
+					</p:column>
+
+
+					<p:column headerText="Opções" width="190">
+<p:commandButton value="Editar"  onclick="location='/entriesForm.xhtml?id=#{financialEntry._id}'"  />
+											 <p:commandButton value="Excluir" actionListener="#{financialEntryBean.removeEntry}" update=":form">  
+     						<f:param id="itemId" name="itemId" value="#{financialEntry._id}" />  
+						</p:commandButton>
+						<p:commandButton value="Fechar" actionListener="#{financialEntryBean.toggleClose}" update=":form">  
+     						<f:param id="itemId2" name="itemId" value="#{financialEntry._id}" />  
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+<p:commandButton value="Adicionar"  onclick="location='/entriesForm.xhtml'"  />
+			</h:form>
+
+
+
+
+
+
+
+</ui:define>
+
+	</ui:composition>
+
+</h:body>
+
+</html>

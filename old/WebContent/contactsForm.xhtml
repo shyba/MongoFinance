@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> 
+      			<f:metadata>
+        <f:event type="preRenderView" listener="#{contactDataTable.init}" />
+    </f:metadata>
+<h:body>
+
+	<ui:composition template="mainLayout.xhtml">
+		
+		<ui:define name="content">
+		<br/><br/>
+		<h:form >
+<p:fieldset legend="Adicionar Contato" widgetVar="regWidget" style="width: 600px;">
+   <h:panelGrid columns="3" width="550" border="0">
+    <h:outputLabel value="Nome" />
+    <p:inputText value="#{contactDataTable.contact.name}" 
+       id="Name"
+        required="true" 
+        requiredMessage="Nome do contato é obrigatório!"
+        validatorMessage="Nome do contato deve ter entre 3 e 120 catacteres!"
+        >
+     <f:validateLength minimum="3" maximum="120" for="Name"></f:validateLength>
+    </p:inputText>
+    <p:message for="Name"/>
+    
+    <h:outputLabel value="Email" />
+    <p:inputText value="#{contactDataTable.contact.mail}" 
+       id="Email"
+        required="true" 
+        requiredMessage="Email do contato é obrigatório!"
+        validatorMessage="Email do contato deve ter entre 3 e 120 catacteres!"
+        >
+     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
+    </p:inputText>
+    <p:message for="Email"/>
+    
+    <h:outputLabel value="Celular" />
+    <p:inputText value="#{contactDataTable.contact.mobileNumber}" 
+       id="Celular"
+        required="false" 
+        requiredMessage="Celular do contato é obrigatório!"
+        validatorMessage="Celular do contato deve ter entre 3 e 120 catacteres!"
+        >
+     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
+    </p:inputText>
+    <p:message for="Celular"/>
+    
+    <h:outputLabel value="Fixo" />
+    <p:inputText value="#{contactDataTable.contact.homeNumber}" 
+       id="Fixo"
+        required="false" 
+        requiredMessage="Fixo do contato é obrigatório!"
+        validatorMessage="Fixo do contato deve ter entre 3 e 120 catacteres!"
+        >
+     <f:validateLength minimum="3" maximum="120" for="Email"></f:validateLength>
+    </p:inputText>
+    <p:message for="Fixo"/>
+    
+    <p:commandButton value="Adicionar" action="#{contactDataTable.register}" ajax="false" ></p:commandButton>
+    </h:panelGrid>
+    </p:fieldset>
+
+
+</h:form> 
+		</ui:define>
+		
+	</ui:composition>
+
+</h:body>
+
+</html>
