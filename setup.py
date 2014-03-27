@@ -14,6 +14,7 @@ requires = [
     'pyramid_debugtoolbar',
     'pyramid_jinja2',
     'waitress',
+    'pymongo',
     ]
 
 setup(name='MongoFinance',
