@@ -15,6 +15,8 @@ requires = [
     'pyramid_jinja2',
     'waitress',
     'pymongo',
+    'nose',
+    'coverage',
     ]
 
 setup(name='MongoFinance',
