@@ -4,10 +4,10 @@
 import unittest
 from mongofinance.core.balance import Balance
 from mongofinance.core.expense import Expense
-from mongofinance.core.expense import RecurringExpense
 from pyramid import testing
 import pymongo
 import datetime
+from datetime import timedelta
 
 
 class ViewTests(unittest.TestCase):
@@ -73,13 +73,38 @@ class TestExpenses(unittest.TestCase):
         today = datetime.date.today()
         self.assertEqual(expense.date, today)
 
-    def test_recurrent_expenses(self):
+    def test_recurring_expense_possible(self):
         """
-        Generate expenses based on a recurring expense
+        Repeat an expense based on 'repeat' attribute
         """
-        expense = Expense("Car Wash", value=20, date="01-04-2014")
-        recurring = RecurringExpense(
-            expense, interval_days=20, end_date="21-04-2014")
-        generated = recurring.generate()
-        self.assertEquals(1, len(generated))
-        self.assertEquals(expense, generated[0])
+        today = datetime.date.today()
+        expense = Expense("Water", 10,
+                          date=today - timedelta(days=1))
+        expense.repeat = True
+        self.assertTrue(expense.is_recurrent(today.month, today.year))
+
+        test_date = today + datetime.timedelta(weeks=100)
+        self.assertTrue(expense.is_recurrent(test_date.month, test_date.year))
+
+    def test_recurring_expense_until_end_date(self):
+        """
+        Given expense date and recurring end date,
+        the recurrence function must validate the
+        range between them.
+        """
+        today = datetime.date.today()
+        expense = Expense("Water", 10,
+                          date=today - timedelta(days=1))
+
+        expense.repeat = True
+        expense.recurring_end = today + timedelta(weeks=40)
+
+        test_date = today + datetime.timedelta(weeks=100)
+        self.assertFalse(expense.is_recurrent(test_date.month, test_date.year))
+
+        test_date = today + datetime.timedelta(weeks=40)
+        self.assertTrue(expense.is_recurrent(test_date.month, test_date.year))
+
+        test_date = today + datetime.timedelta(weeks=50)
+        self.assertFalse(expense.is_recurrent(test_date.month, test_date.year))
+
