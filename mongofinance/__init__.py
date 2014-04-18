@@ -1,6 +1,9 @@
 from pyramid.config import Configurator
 
-from urlparse import urlparse
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 import pymongo
 
 def main(global_config, **settings):
