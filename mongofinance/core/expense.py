@@ -27,7 +27,6 @@ class Expense(object):
             return True
         test_date = datetime.date(month=month, year=year, day=recurring_end.day)
         delta = recurring_end - test_date
-        print delta.days, test_date
         if delta.days >= 0:
             return True
         return False
