@@ -5,11 +5,14 @@ import datetime
 
 
 class Expense(object):
+
     """
     This class represents an Expense
     """
 
     def __init__(self, name, value, date=None):
+        self.repeat = None
+        self.recurring_end = None
         self.name = name
         self.value = value
         if not date:
@@ -18,18 +21,13 @@ class Expense(object):
             self.date = date
         self.is_paid = False
 
-class RecurringExpense(object):
-    """
-    Expense generator based on interval and dates
-    """
-
-    def __init__(self, expense, interval_days, end_date=None):
-        self.end_date = end_date
-        self.expense = expense
-        self.interval = interval_days
-
-    def generate(self):
-        """
-        Returns a list with generated expenses
-        """
-        return [self.expense]
+    def is_recurrent(self, month, year):
+        recurring_end = self.recurring_end
+        if not recurring_end:
+            return True
+        test_date = datetime.date(month=month, year=year, day=recurring_end.day)
+        delta = recurring_end - test_date
+        print delta.days, test_date
+        if delta.days >= 0:
+            return True
+        return False
