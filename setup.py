@@ -17,6 +17,7 @@ requires = [
     'pymongo',
     'nose',
     'coverage',
+    'coveralls',
     ]
 
 setup(name='MongoFinance',
