@@ -5,7 +5,6 @@ from unittest import TestCase
 from mongofinance.core.balance import Balance
 from mongofinance.core.expense import Expense
 from pyramid import testing
-import pymongo
 import datetime
 from datetime import timedelta
 
