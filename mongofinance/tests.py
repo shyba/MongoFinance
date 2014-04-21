@@ -1,7 +1,7 @@
 """
     Main test file. Should be splitted soon.
 """
-import unittest
+from unittest import TestCase
 from mongofinance.core.balance import Balance
 from mongofinance.core.expense import Expense
 from pyramid import testing
@@ -10,7 +10,7 @@ import datetime
 from datetime import timedelta
 
 
-class ViewTests(unittest.TestCase):
+class ViewTests(TestCase):
 
     """ Generic tests for all the views
     """
@@ -32,7 +32,7 @@ class ViewTests(unittest.TestCase):
         self.assertEquals(info, {})
 
 
-class TestBalance(unittest.TestCase):
+class TestBalance(TestCase):
 
     """
     Bank balance tests
@@ -55,8 +55,47 @@ class TestBalance(unittest.TestCase):
         balance = Balance(initial=1000)
         self.assertEquals(balance.initial, 1000)
 
+    def test_near_future_balance(self):
+        """
+        Subtract all current unpaid expenses from the current balance to get the 'near future balance'.
+        """
+        expenses = [Expense("Expense-%s" % i, i) for i in range(1, 10)]
+        balance = Balance(current=100, expenses=expenses)
+        self.assertEqual(len(range(1, 10)), len(balance.expenses))
+        self.assertEqual(
+            100 - sum(range(1, 10)),
+            balance.near_future
+        )
+        new_expense = Expense("Water", 100)
+        expenses.append(new_expense)
+        balance.add(new_expense)
+        self.assertEqual(
+            expenses,
+            balance.expenses
+        )
+        self.assertEqual(
+            100 - sum([expense.value for expense in expenses]),
+            balance.near_future
+        )
+        print balance.near_future
 
-class TestExpenses(unittest.TestCase):
+    def test_expenses_side_effects(self):
+        """
+        Modifications made to expenses property shouldnt affect Balance!
+        """
+        expenses = [Expense("Expense-%s" % i, i) for i in range(1, 10)]
+        balance = Balance(current=100, expenses=expenses)
+        self.assertEqual(len(range(1, 10)), len(balance.expenses))
+
+        expenses = balance.expenses
+        expenses.append(Expense("Wont be appended",1000))
+        self.assertNotEqual(len(expenses), len(balance.expenses))
+
+
+
+
+
+class TestExpenses(TestCase):
 
     """
     Expenses tests
@@ -107,4 +146,3 @@ class TestExpenses(unittest.TestCase):
 
         test_date = today + datetime.timedelta(weeks=50)
         self.assertFalse(expense.is_recurrent(test_date.month, test_date.year))
-
