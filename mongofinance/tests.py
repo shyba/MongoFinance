@@ -87,7 +87,7 @@ class TestBalance(TestCase):
         self.assertEqual(len(range(1, 10)), len(balance.expenses))
 
         expenses = balance.expenses
-        expenses.append(Expense("Wont be appended",1000))
+        expenses.append(Expense("Wont be appended", 1000))
         self.assertNotEqual(len(expenses), len(balance.expenses))
 
 
