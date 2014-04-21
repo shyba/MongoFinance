@@ -77,7 +77,6 @@ class TestBalance(TestCase):
             100 - sum([expense.value for expense in expenses]),
             balance.near_future
         )
-        print balance.near_future
 
     def test_expenses_side_effects(self):
         """
